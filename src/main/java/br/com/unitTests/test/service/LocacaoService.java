@@ -41,11 +41,6 @@ public class LocacaoService {
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(1L),
                 calculaValorTotal(filmes));
-//        locacao.setFilmes(filmes);
-//        locacao.setUsuario(usuario);
-//        locacao.setDataLocacao(LocalDateTime.now());
-//
-//        locacao.setValor();
 
         //Entrega no dia seguinte
         locacao.setDataRetorno(LocalDateTime.now().plusDays(1L));
