@@ -36,12 +36,17 @@ public class LocacaoService {
         if(!filmes1.isEmpty()) {
             throw new FilmeSemEstoqueException("Existem filmes sem estoque");
         }
+
+        //aplicador de desconto progressivo
+        aplicadescontoprogressivo(filmes);
+
         //TODO criar um builder para Locação
         Locacao locacao = new Locacao(null,
                 filmes,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(1L),
                 calculaValorTotal(filmes));
+
 
         //Entrega no dia seguinte
         locacao.setDataRetorno(LocalDateTime.now().plusDays(1L));
@@ -50,6 +55,21 @@ public class LocacaoService {
         //TODO adicionar método para salvar
 
         return locacao;
+    }
+
+    private void aplicadescontoprogressivo(List<Filme> filmes) {
+        LOGGER.info("Lista de filmes com: " + filmes.stream().count());
+        if (filmes.stream().count() < 3){
+            return;
+        }
+        for (int i = 0; i <= filmes.stream().count(); i++){
+            if (i == 3) {
+                filmes.get(i-1).setPrecoLocacao(filmes.get(i-1).getPrecoLocacao().multiply(BigDecimal.valueOf(Double.parseDouble("0.75"))));
+            }
+            if (i >= 4) {
+                filmes.get(i-1).setPrecoLocacao(filmes.get(i-1).getPrecoLocacao().multiply(BigDecimal.valueOf(Double.parseDouble("0.5"))));
+            }
+        }
     }
 
     private BigDecimal calculaValorTotal(List<Filme> filmes) {
