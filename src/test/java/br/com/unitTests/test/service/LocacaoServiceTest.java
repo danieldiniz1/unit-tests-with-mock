@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 public class LocacaoServiceTest {
@@ -67,11 +68,13 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void testLocacao_usuarioVazio() throws FilmeSemEstoqueException{
+    public void testLocacao_usuarioVazio_filmesVazio() throws FilmeSemEstoqueException{
         //cenario
         Filme filme = new Filme("Filme 2", 1, BigDecimal.valueOf(Double.valueOf("12")));
         //verificacao
         Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(null, Arrays.asList(filme)));
+        Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(new Usuario("teste"), null));
+        Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(new Usuario("teste"), Collections.EMPTY_LIST));
     }
 
     @Test
