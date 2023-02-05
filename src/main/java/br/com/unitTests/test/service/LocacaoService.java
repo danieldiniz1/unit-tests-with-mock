@@ -2,6 +2,7 @@ package br.com.unitTests.test.service;
 
 import br.com.unitTests.test.exceptions.FilmeSemEstoqueException;
 import br.com.unitTests.test.exceptions.LocadoraException;
+import br.com.unitTests.test.exceptions.MovieReturnException;
 import br.com.unitTests.test.model.Filme;
 import br.com.unitTests.test.model.Locacao;
 import br.com.unitTests.test.model.Usuario;
@@ -12,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ public class LocacaoService {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public Locacao alugarFilme(Usuario usuario, final List<Filme> filmes) throws FilmeSemEstoqueException, LocadoraException {
+    public Locacao alugarFilme(Usuario usuario, final List<Filme> filmes, LocalDateTime dateLocation) throws FilmeSemEstoqueException, LocadoraException, MovieReturnException {
         if(usuario == null) {
             throw new LocadoraException("Usuario vazio");
         }
@@ -37,19 +39,26 @@ public class LocacaoService {
             throw new FilmeSemEstoqueException("Existem filmes sem estoque");
         }
 
+
+
         //aplicador de desconto progressivo
         aplicadescontoprogressivo(filmes);
 
         //TODO criar um builder para Locação
         Locacao locacao = new Locacao(null,
                 filmes,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1L),
+                dateLocation,
+                dateLocation.plusDays(1L),
                 calculaValorTotal(filmes));
 
 
-        //Entrega no dia seguinte
-        locacao.setDataRetorno(LocalDateTime.now().plusDays(1L));
+        //Verifica se entrega no dia seguinte não é dia da loja estar fechada
+        System.out.println("dia da locação: " + locacao.getDataLocacao().getDayOfWeek());
+        System.out.println("dia da Devolução: " + locacao.getDataRetorno().getDayOfWeek());
+        LocalDateTime sundayDay = LocalDateTime.of(2023, Month.FEBRUARY, 5, 0, 0);
+        if (locacao.getDataRetorno().getDayOfWeek().equals(sundayDay.getDayOfWeek())){
+            throw new MovieReturnException("Data de retorno com a loja fechada!");
+        }
 
         //Salvando a locacao...
         //TODO adicionar método para salvar

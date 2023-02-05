@@ -1,28 +1,29 @@
-[2023-01-30 12:56:39,888] [br.com.unitTests.test.service.LocacaoService] [main] [58] [INFO ] Before: 0
-[2023-01-30 12:56:39,894] [br.com.unitTests.test.service.LocacaoService] [main] [60] [INFO ] after: 0
-[2023-01-30 12:57:16,557] [br.com.unitTests.test.service.LocacaoService] [main] [58] [INFO ] Before: 0
-[2023-01-30 12:57:16,559] [br.com.unitTests.test.service.LocacaoService] [main] [60] [INFO ] after: 0
-[2023-01-30 12:58:19,875] [br.com.unitTests.test.service.LocacaoService] [main] [58] [INFO ] Before: 0
-[2023-01-30 12:58:19,877] [br.com.unitTests.test.service.LocacaoService] [main] [60] [INFO ] after: 0
-[2023-01-30 13:53:10,242] [br.com.unitTests.test.service.LocacaoService] [main] [59] [INFO ] Before: 0
-[2023-01-30 13:53:10,249] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] after: 0
-[2023-01-30 13:56:19,824] [br.com.unitTests.test.service.LocacaoService] [main] [59] [INFO ] Before: 0
-[2023-01-30 13:56:19,829] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] after: 0
-[2023-01-30 13:56:40,461] [br.com.unitTests.test.service.LocacaoService] [main] [59] [INFO ] Before: 0
-[2023-01-30 13:56:40,465] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] after: 0
-[2023-01-30 13:58:04,782] [br.com.unitTests.test.service.LocacaoService] [main] [59] [INFO ] Before: 0
-[2023-01-30 13:58:04,785] [br.com.unitTests.test.service.LocacaoService] [main] [62] [INFO ] after: 0
-[2023-01-30 14:07:55,587] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] Before: 0
-[2023-01-30 14:07:55,590] [br.com.unitTests.test.service.LocacaoService] [main] [63] [INFO ] 5.0
-[2023-01-30 14:07:55,590] [br.com.unitTests.test.service.LocacaoService] [main] [65] [INFO ] after: 0
-[2023-01-30 14:08:56,615] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] Before: 0
-[2023-01-30 14:08:56,617] [br.com.unitTests.test.service.LocacaoService] [main] [64] [INFO ] after: 0
-[2023-01-30 14:12:34,603] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] Before: 0
-[2023-01-30 14:12:38,559] [br.com.unitTests.test.service.LocacaoService] [main] [63] [INFO ] totalrent: 5.0
-[2023-01-30 14:13:05,112] [br.com.unitTests.test.service.LocacaoService] [main] [66] [INFO ] after: 0
-[2023-01-30 14:16:11,137] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] Before: 0
-[2023-01-30 14:16:13,408] [br.com.unitTests.test.service.LocacaoService] [main] [63] [INFO ] totalrent: 5.0
-[2023-01-30 14:16:21,608] [br.com.unitTests.test.service.LocacaoService] [main] [66] [INFO ] after: 0
-[2023-01-30 14:17:46,558] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] Before: 0
-[2023-01-30 14:17:54,302] [br.com.unitTests.test.service.LocacaoService] [main] [63] [INFO ] totalrent: 5.0
-[2023-01-30 14:18:08,992] [br.com.unitTests.test.service.LocacaoService] [main] [66] [INFO ] after: 0
+[2023-02-05 14:10:36,585] [br.com.unitTests.test.service.LocacaoService] [main] [61] [INFO ] Lista de filmes com: 1
+[2023-02-05 14:33:07,588] [br.com.unitTests.test.service.LocacaoService] [main] [67] [INFO ] Lista de filmes com: 1
+[2023-02-05 14:57:25,757] [br.com.unitTests.test.service.LocacaoService] [main] [67] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:11:11,435] [br.com.unitTests.test.service.LocacaoService] [main] [67] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:12:02,565] [br.com.unitTests.test.service.LocacaoService] [main] [67] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:14:09,277] [br.com.unitTests.test.service.LocacaoService] [main] [67] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:14:15,057] [br.com.unitTests.test.service.LocacaoService] [main] [67] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:16:21,465] [br.com.unitTests.test.service.LocacaoService] [main] [67] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:20:21,580] [br.com.unitTests.test.service.LocacaoService] [main] [69] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:22:09,201] [br.com.unitTests.test.service.LocacaoService] [main] [69] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:22:40,824] [br.com.unitTests.test.service.LocacaoService] [main] [69] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:26:38,618] [br.com.unitTests.test.service.LocacaoService] [main] [72] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:28:18,037] [br.com.unitTests.test.service.LocacaoService] [main] [72] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:30:33,330] [br.com.unitTests.test.service.LocacaoService] [main] [68] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:30:33,339] [br.com.unitTests.test.service.LocacaoService] [main] [68] [INFO ] Lista de filmes com: 2
+[2023-02-05 15:30:33,341] [br.com.unitTests.test.service.LocacaoService] [main] [68] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:30:33,344] [br.com.unitTests.test.service.LocacaoService] [main] [68] [INFO ] Lista de filmes com: 3
+[2023-02-05 15:30:33,347] [br.com.unitTests.test.service.LocacaoService] [main] [68] [INFO ] Lista de filmes com: 4
+[2023-02-05 15:32:04,895] [br.com.unitTests.test.service.LocacaoService] [main] [68] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:34:22,717] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:35:23,229] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:37:02,745] [br.com.unitTests.test.service.LocacaoService] [main] [69] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:39:13,007] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:41:33,923] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:41:45,278] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:41:45,283] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 2
+[2023-02-05 15:41:45,284] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 1
+[2023-02-05 15:41:45,287] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 3
+[2023-02-05 15:41:45,290] [br.com.unitTests.test.service.LocacaoService] [main] [70] [INFO ] Lista de filmes com: 4
