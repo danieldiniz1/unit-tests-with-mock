@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,8 +54,6 @@ public class LocacaoService {
 
 
         //Verifica se entrega no dia seguinte não é dia da loja estar fechada
-        System.out.println("dia da locação: " + locacao.getDataLocacao().getDayOfWeek());
-        System.out.println("dia da Devolução: " + locacao.getDataRetorno().getDayOfWeek());
         LocalDateTime sundayDay = LocalDateTime.of(2023, Month.FEBRUARY, 5, 0, 0);
         if (locacao.getDataRetorno().getDayOfWeek().equals(sundayDay.getDayOfWeek())){
             throw new MovieReturnException("Data de retorno com a loja fechada!");
