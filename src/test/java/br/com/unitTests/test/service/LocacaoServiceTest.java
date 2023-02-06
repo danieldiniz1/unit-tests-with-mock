@@ -1,14 +1,14 @@
 package br.com.unitTests.test.service;
 
+import br.com.unitTests.test.builder.FilmeBuilder;
+import br.com.unitTests.test.builder.UsuarioBuilder;
 import br.com.unitTests.test.exceptions.FilmeSemEstoqueException;
 import br.com.unitTests.test.exceptions.LocadoraException;
 import br.com.unitTests.test.exceptions.MovieReturnException;
 import br.com.unitTests.test.model.Filme;
 import br.com.unitTests.test.model.Locacao;
 import br.com.unitTests.test.model.Usuario;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -87,7 +87,13 @@ public class LocacaoServiceTest {
     @Test
     public void testLocacao_usuarioVazio_filmesVazio() throws FilmeSemEstoqueException{
         //cenario
-        Filme filme = new Filme("Filme 2", 1, BigDecimal.valueOf(Double.valueOf("12")));
+//        Filme filme = new Filme("Filme 2", 1, BigDecimal.valueOf(Double.valueOf("12")));
+        Filme filme = FilmeBuilder.filmeBuilder()
+                .setPreco(BigDecimal.valueOf(12.4))
+                .setNome("filme2")
+                .setEstoque(12)
+                .build();
+
         //verificacao
         Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(null, Arrays.asList(filme),diaOk));
         Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(new Usuario("teste"), null,diaOk));
@@ -97,7 +103,7 @@ public class LocacaoServiceTest {
     @Test
     public void testLocacao_FilmeVazio() throws FilmeSemEstoqueException, LocadoraException {
         //cenario
-        Usuario usuario = new Usuario("Usuario 1");
+        Usuario usuario = UsuarioBuilder.builder().getUsuario();
         //verificacao
         Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(usuario, Arrays.asList(),diaOk));
     }
@@ -126,10 +132,9 @@ public class LocacaoServiceTest {
     }
 
     @Test
+//    @Ignore // ignora o teste quando não posso ser executado;
     public void shouldNotReturnMovieWhenIsSundae() throws FilmeSemEstoqueException, LocadoraException {
         Filme filme = new Filme("Filme 1", 10, BigDecimal.valueOf(Double.valueOf("6.0")));
-
-
         Assert.assertThrows(MovieReturnException.class,
                 () -> locacaoService.alugarFilme(usuarioMock, Arrays.asList(filme),diaNOk));
 
