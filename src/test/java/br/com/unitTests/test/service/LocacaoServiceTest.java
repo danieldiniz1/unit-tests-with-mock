@@ -158,6 +158,7 @@ public class LocacaoServiceTest {
     public void shouldNotRentIfUserHasDebts(){
         given(spcService.possuiNegativacao(usuarioMock)).willReturn(true);
         assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(usuarioMock,filmes,diaOk));
+        Mockito.verify(spcService).possuiNegativacao(usuarioMock);
     }
 
     @Test

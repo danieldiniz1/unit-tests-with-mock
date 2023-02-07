@@ -32,25 +32,20 @@ public class LocacaoService {
         this.spcService = spcService;
         this.emailService = emailService;
     }
-
     public Locacao alugarFilme(Usuario usuario, final List<Filme> filmes, LocalDateTime dateLocation) throws FilmeSemEstoqueException, LocadoraException, MovieReturnException {
         if(usuario == null) {
             throw new LocadoraException("Usuario vazio");
         }
-
         if(filmes == null || filmes.isEmpty()) {
             throw new LocadoraException("Filme vazio");
         }
-
         List<Filme> filmes1 = filmes.stream().filter(filme -> filme.getEstoque().equals(0)).collect(Collectors.toList());
         if(!filmes1.isEmpty()) {
             throw new FilmeSemEstoqueException("Existem filmes sem estoque");
         }
-
         if (spcService.possuiNegativacao(usuario)){
             throw new LocadoraException("Usuário com negativação");
         }
-
         //aplicador de desconto progressivo
         aplicadescontoprogressivo(filmes);
 
@@ -60,24 +55,12 @@ public class LocacaoService {
                 dateLocation,
                 dateLocation.plusDays(1L),
                 calculaValorTotal(filmes)).build();
-
-//        Locacao locacao = new Locacao(null,null,
-//                filmes,
-//                dateLocation,
-//                dateLocation.plusDays(1L),
-//                calculaValorTotal(filmes));
-
-
         //Verifica se entrega no dia seguinte não é dia da loja estar fechada
         LocalDateTime sundayDay = LocalDateTime.of(2023, Month.FEBRUARY, 5, 0, 0);
         if (locacao.getDataRetorno().getDayOfWeek().equals(sundayDay.getDayOfWeek())){
             throw new MovieReturnException("Data de retorno com a loja fechada!");
         }
-
-        //Salvando a locacao...
-        //TODO adicionar método para salvar
         locacaoRepository.save(locacao);
-
         return locacao;
     }
 
@@ -86,7 +69,6 @@ public class LocacaoService {
         emAtraso.forEach(locacao -> {
             emailService.notificarAtraso(locacao);
         });
-
     }
     private void aplicadescontoprogressivo(List<Filme> filmes) {
         LOGGER.info("Lista de filmes com: " + filmes.stream().count());
