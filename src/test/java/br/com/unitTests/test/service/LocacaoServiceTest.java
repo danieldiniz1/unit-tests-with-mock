@@ -1,6 +1,7 @@
 package br.com.unitTests.test.service;
 
 import br.com.unitTests.test.builder.FilmeBuilder;
+import br.com.unitTests.test.builder.LocacaoBuilder;
 import br.com.unitTests.test.builder.UsuarioBuilder;
 import br.com.unitTests.test.exceptions.FilmeSemEstoqueException;
 import br.com.unitTests.test.exceptions.LocadoraException;
@@ -8,22 +9,26 @@ import br.com.unitTests.test.exceptions.MovieReturnException;
 import br.com.unitTests.test.model.Filme;
 import br.com.unitTests.test.model.Locacao;
 import br.com.unitTests.test.model.Usuario;
-import org.junit.*;
+import br.com.unitTests.test.repository.LocacaoRepository;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class LocacaoServiceTest {
@@ -32,15 +37,23 @@ public class LocacaoServiceTest {
     private LocacaoService locacaoService;
     @Mock
     private Usuario usuarioMock;
+    private List<Filme> filmes = new ArrayList<>();
     private LocalDateTime diaOk;
     private LocalDateTime diaNOk;
+
+    @Mock
+    private LocacaoRepository locacaoRepository;
+    @Mock
+    private SPCService spcService;
+    @Mock
+    private EmailService emailService;
 
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
-        locacaoService = new LocacaoService();
         diaNOk = LocalDateTime.of(2023, Month.FEBRUARY,4,0,0);
         diaOk = LocalDateTime.of(2023, Month.FEBRUARY,3,0,0);
+        filmes.add(FilmeBuilder.filmeBuilder().setNome("filme1").setEstoque(10).setPreco(BigDecimal.TEN).build());
     }
 
     @Test
@@ -53,11 +66,11 @@ public class LocacaoServiceTest {
         Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(filme),diaOk);
 
         //verificacao
-        Assert.assertEquals("Rent Value is incorrect",BigDecimal.valueOf(Double.valueOf("5.0")),locacao.getValor());
+        assertEquals("Rent Value is incorrect",BigDecimal.valueOf(Double.valueOf("5.0")),locacao.getValor());
         System.out.println("dia1: " + diaOk.getDayOfWeek());
         System.out.println("dia2: " + locacao.getDataLocacao().getDayOfWeek());
-        Assert.assertEquals("Date Value is incorrect", diaOk.getDayOfWeek(),locacao.getDataLocacao().getDayOfWeek());
-        Assert.assertEquals("Date Value is incorrect", diaOk.plusDays(1L).getDayOfWeek(),locacao.getDataRetorno().getDayOfWeek());
+        assertEquals("Date Value is incorrect", diaOk.getDayOfWeek(),locacao.getDataLocacao().getDayOfWeek());
+        assertEquals("Date Value is incorrect", diaOk.plusDays(1L).getDayOfWeek(),locacao.getDataRetorno().getDayOfWeek());
 
     }
 
@@ -68,7 +81,7 @@ public class LocacaoServiceTest {
         Filme filmeSemEstoque = new Filme("Filme 1", 0, BigDecimal.valueOf(Double.valueOf("5.0")));
 
         //acao e verificação
-        Assert.assertThrows(FilmeSemEstoqueException.class,
+        assertThrows(FilmeSemEstoqueException.class,
                 () ->locacaoService.alugarFilme(usuario, Arrays.asList(filmeSemEstoque),diaOk));
     }
 
@@ -81,7 +94,7 @@ public class LocacaoServiceTest {
         Locacao locacao = locacaoService.alugarFilme(usuario, Arrays.asList(filme1,filme2),diaOk);
 
         //verificacao
-        Assert.assertEquals("Rent Value is incorrect",BigDecimal.valueOf(Double.valueOf("12")),locacao.getValor());
+        assertEquals("Rent Value is incorrect",BigDecimal.valueOf(Double.valueOf("12")),locacao.getValor());
     }
 
     @Test
@@ -95,9 +108,9 @@ public class LocacaoServiceTest {
                 .build();
 
         //verificacao
-        Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(null, Arrays.asList(filme),diaOk));
-        Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(new Usuario("teste"), null,diaOk));
-        Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(new Usuario("teste"), Collections.EMPTY_LIST,diaOk));
+        assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(null, Arrays.asList(filme),diaOk));
+        assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(new Usuario("teste"), null,diaOk));
+        assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(new Usuario("teste"), Collections.EMPTY_LIST,diaOk));
     }
 
     @Test
@@ -105,7 +118,7 @@ public class LocacaoServiceTest {
         //cenario
         Usuario usuario = UsuarioBuilder.builder().getUsuario();
         //verificacao
-        Assert.assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(usuario, Arrays.asList(),diaOk));
+        assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(usuario, Arrays.asList(),diaOk));
     }
 
     @Test
@@ -116,7 +129,7 @@ public class LocacaoServiceTest {
         Locacao locacao = locacaoService.alugarFilme(usuarioMock, Arrays.asList(filme1,filme2,filme3),diaOk);
 
         BigDecimal valueExpected = BigDecimal.valueOf(6).multiply(BigDecimal.valueOf(Double.valueOf("0.75"))).add(BigDecimal.valueOf(Double.valueOf("12.0")));
-        Assert.assertEquals("Rent Value is incorrect",valueExpected,locacao.getValor().setScale(2, RoundingMode.HALF_UP));
+        assertEquals("Rent Value is incorrect",valueExpected,locacao.getValor().setScale(2, RoundingMode.HALF_UP));
     }
     @Test
     public void testeLocacao_Desconto25PorCentoNoTeceiroFilmeEQuartoFilme() throws FilmeSemEstoqueException, LocadoraException, MovieReturnException {
@@ -128,16 +141,36 @@ public class LocacaoServiceTest {
 
         BigDecimal threeMovies = BigDecimal.valueOf(6).multiply(BigDecimal.valueOf(Double.valueOf("0.75"))).add(BigDecimal.valueOf(Double.valueOf("12.0")));
         BigDecimal valueExpected = BigDecimal.valueOf(10).multiply(BigDecimal.valueOf(Double.valueOf("0.5"))).add(threeMovies);
-        Assert.assertEquals("Rent Value is incorrect",valueExpected,locacao.getValor().setScale(2, RoundingMode.HALF_UP));
+        assertEquals("Rent Value is incorrect",valueExpected,locacao.getValor().setScale(2, RoundingMode.HALF_UP));
     }
 
     @Test
 //    @Ignore // ignora o teste quando não posso ser executado;
     public void shouldNotReturnMovieWhenIsSundae() throws FilmeSemEstoqueException, LocadoraException {
         Filme filme = new Filme("Filme 1", 10, BigDecimal.valueOf(Double.valueOf("6.0")));
-        Assert.assertThrows(MovieReturnException.class,
+        assertThrows(MovieReturnException.class,
                 () -> locacaoService.alugarFilme(usuarioMock, Arrays.asList(filme),diaNOk));
 
 
     }
+
+    @Test
+    public void shouldNotRentIfUserHasDebts(){
+        given(spcService.possuiNegativacao(usuarioMock)).willReturn(true);
+        assertThrows(LocadoraException.class,() -> locacaoService.alugarFilme(usuarioMock,filmes,diaOk));
+    }
+
+    @Test
+    public void shouldSendEmailWithLocacaoIsLate(){
+        Locacao locacao = LocacaoBuilder.builder().setDadosBasicos(usuarioMock,
+                filmes,
+                diaOk,
+                diaOk.plusDays(1L),
+                BigDecimal.TEN).build();
+        given(locacaoRepository.findByEstaAtrasado(true)).willReturn(Arrays.asList(locacao));
+        locacaoService.noitificarClientesComAluguelAtrasado();
+
+        Mockito.verify(emailService).notificarAtraso(locacao);
+    }
+
 }

@@ -1,5 +1,6 @@
 package br.com.unitTests.test.model;
 
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,9 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Entity
 public class Usuario {
 
     private String nome;
+
 
     @Override
     public boolean equals(Object obj) {

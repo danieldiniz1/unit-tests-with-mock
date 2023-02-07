@@ -1,5 +1,6 @@
 package br.com.unitTests.test.model;
 
+import jakarta.persistence.Entity;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Entity
 public class Filme {
 
     private String nome;

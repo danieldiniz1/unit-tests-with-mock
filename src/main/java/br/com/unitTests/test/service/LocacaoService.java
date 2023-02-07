@@ -1,30 +1,37 @@
 package br.com.unitTests.test.service;
 
+import br.com.unitTests.test.builder.LocacaoBuilder;
 import br.com.unitTests.test.exceptions.FilmeSemEstoqueException;
 import br.com.unitTests.test.exceptions.LocadoraException;
 import br.com.unitTests.test.exceptions.MovieReturnException;
 import br.com.unitTests.test.model.Filme;
 import br.com.unitTests.test.model.Locacao;
 import br.com.unitTests.test.model.Usuario;
+import br.com.unitTests.test.repository.LocacaoRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 @Service
 public class LocacaoService {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private LocacaoRepository locacaoRepository;
+    private SPCService spcService;
+    private EmailService emailService;
+
+
+    public LocacaoService(LocacaoRepository locacaoRepository, SPCService spcService, EmailService emailService) {
+        this.locacaoRepository = locacaoRepository;
+        this.spcService = spcService;
+        this.emailService = emailService;
+    }
 
     public Locacao alugarFilme(Usuario usuario, final List<Filme> filmes, LocalDateTime dateLocation) throws FilmeSemEstoqueException, LocadoraException, MovieReturnException {
         if(usuario == null) {
@@ -40,17 +47,25 @@ public class LocacaoService {
             throw new FilmeSemEstoqueException("Existem filmes sem estoque");
         }
 
-
+        if (spcService.possuiNegativacao(usuario)){
+            throw new LocadoraException("Usuário com negativação");
+        }
 
         //aplicador de desconto progressivo
         aplicadescontoprogressivo(filmes);
 
         //TODO criar um builder para Locação
-        Locacao locacao = new Locacao(null,
+        Locacao locacao = LocacaoBuilder.builder().setDadosBasicos(usuario,
                 filmes,
                 dateLocation,
                 dateLocation.plusDays(1L),
-                calculaValorTotal(filmes));
+                calculaValorTotal(filmes)).build();
+
+//        Locacao locacao = new Locacao(null,null,
+//                filmes,
+//                dateLocation,
+//                dateLocation.plusDays(1L),
+//                calculaValorTotal(filmes));
 
 
         //Verifica se entrega no dia seguinte não é dia da loja estar fechada
@@ -61,10 +76,18 @@ public class LocacaoService {
 
         //Salvando a locacao...
         //TODO adicionar método para salvar
+        locacaoRepository.save(locacao);
 
         return locacao;
     }
 
+    public void noitificarClientesComAluguelAtrasado(){
+        List<Locacao> emAtraso = locacaoRepository.findByEstaAtrasado(true);
+        emAtraso.forEach(locacao -> {
+            emailService.notificarAtraso(locacao);
+        });
+
+    }
     private void aplicadescontoprogressivo(List<Filme> filmes) {
         LOGGER.info("Lista de filmes com: " + filmes.stream().count());
         if (filmes.stream().count() < 3){
